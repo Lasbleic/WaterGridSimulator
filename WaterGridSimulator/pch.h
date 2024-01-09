@@ -9,5 +9,7 @@
 
 // ajouter les en-têtes à précompiler ici
 #include "framework.h"
+#include <iomanip>
+#include <iostream>
 
 #endif //PCH_H

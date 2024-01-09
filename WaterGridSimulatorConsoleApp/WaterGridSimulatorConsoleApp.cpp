@@ -7,6 +7,7 @@
 int main()
 {
     std::cout << "Hello World!\n";
+    fnWaterGridSimulator();
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
