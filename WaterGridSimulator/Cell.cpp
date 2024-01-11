@@ -8,6 +8,11 @@ Cell::Cell(int floorLevel, double waterLevel, int row, int column) noexcept
 }
 
 // Getters and Setters
+CellIdentifier Cell::getCellIdentifier() const noexcept
+{
+	return m_cellIdentifier;
+}
+
 bool Cell::hasWater() const noexcept
 {
 	return m_waterLevel > m_floorLevel;

@@ -19,6 +19,12 @@
     <Filter Include="Fichiers d%27en-tête\Model">
       <UniqueIdentifier>{a2747386-0644-4d51-8056-c7d4b588acea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Fichiers d%27en-tête\Utils">
+      <UniqueIdentifier>{c8650b0b-9ea3-48fc-b6e1-f41bbb37cd7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Utils">
+      <UniqueIdentifier>{30b05344-5dd3-40bb-b65a-c60563de283a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="framework.h">
@@ -35,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="CellIdentifier.hpp">
       <Filter>Fichiers d%27en-tête\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="CellSet.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
