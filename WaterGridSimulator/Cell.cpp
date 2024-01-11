@@ -2,8 +2,8 @@
 #include "Cell.hpp"
 
 // Constructors
-Cell::Cell(int floorLevel, double waterLevel = 0) noexcept
-	: m_floorLevel(floorLevel), m_waterLevel(waterLevel)
+Cell::Cell(int floorLevel, double waterLevel, int row, int column) noexcept
+	: m_floorLevel(floorLevel), m_waterLevel(waterLevel), m_cellIdentifier(row, column)
 {
 }
 
@@ -58,4 +58,14 @@ std::ostream& operator<<(std::ostream& os, const Cell& cell)
 		os << " " << cell.m_floorLevel << " ";
 	}
 	return os;
+}
+
+bool operator==(const Cell& cell1, const Cell& cell2)
+{
+	return cell1.m_cellIdentifier == cell2.m_cellIdentifier;
+}
+
+bool operator!=(const Cell& cell1, const Cell& cell2)
+{
+	return !(cell1 == cell2);
 }
