@@ -56,3 +56,8 @@ const CellSet& Pond::lowestBorderCells() const noexcept
 {
 	return m_lowestBorderCells;
 }
+
+bool Pond::contains(const Cell& cell) const noexcept
+{
+	return m_waterCells.find(cell) != m_waterCells.end();
+}

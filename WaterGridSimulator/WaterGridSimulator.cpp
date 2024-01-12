@@ -3,7 +3,7 @@
 #include "WaterGridSimulator.hpp"
 
 WaterGridSimulator::WaterGridSimulator(int numberRows, int numberColumns) noexcept
-	: m_cellGrid(numberRows, numberColumns)
+	: m_cellGrid(numberRows, numberColumns), m_ponds()
 {
 }
 
@@ -21,4 +21,18 @@ void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
 {
 	double volumeOfWaterReplaced = m_cellGrid.getCell(row, column).addFloor(height);
 	addWater(row, column, volumeOfWaterReplaced);
+	// TODO : update ponds if necessary
+}
+
+Pond& WaterGridSimulator::getPond(const Cell& cell) noexcept
+{
+	for (Pond& pond : m_ponds)
+	{
+		if (pond.contains(cell))
+		{
+			return pond;
+		}
+	}
+
+
 }

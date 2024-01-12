@@ -11,6 +11,7 @@ public:
 	double waterLevel() const noexcept;
 	int lowestBorderCellsFloorLevel() const noexcept;
 	const CellSet& lowestBorderCells() const noexcept;
+	bool contains(const Cell& cell) const noexcept;
 
 
 private:

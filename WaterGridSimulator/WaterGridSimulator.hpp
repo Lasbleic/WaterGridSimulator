@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CellGrid.hpp"
+#include "Pond.hpp"
 
 class WaterGridSimulator
 {
@@ -18,5 +19,7 @@ public:
 
 private:
 	CellGrid m_cellGrid;
+	std::list<Pond> m_ponds;
+	Pond& getPond(const Cell& cell) noexcept;
 
 };
