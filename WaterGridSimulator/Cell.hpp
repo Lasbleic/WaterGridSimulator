@@ -10,14 +10,18 @@ public:
 	Cell() = delete;
 	Cell(int floorLevel, double waterLevel, int row, int column) noexcept;
 	
-	// Getters and Setters
+	// Getters
 	const CellIdentifier& getCellIdentifier() const noexcept;
 	bool hasWater() const noexcept;
 	double getLevel() const noexcept;
 	double getWaterLevel() const noexcept;
-	void setWaterLevel(double waterLevel) noexcept;
 	int getFloorLevel() const noexcept;
-	void setFloorLevel(int floorLevel) noexcept;
+
+
+	// Methods
+	// Returns the volume of water that has been replaced by the floor
+	double addFloor(int floorHeight) noexcept;
+	void addWater(double waterVolume) noexcept;
 
 	// Operators
 	friend std::ostream& operator<<(std::ostream& os, const Cell& cell);
@@ -28,4 +32,6 @@ private:
 	CellIdentifier m_cellIdentifier;
 	int m_floorLevel;
 	double m_waterLevel;
+
+	double waterVolume() const noexcept;
 };

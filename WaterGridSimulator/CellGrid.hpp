@@ -11,7 +11,7 @@ public:
 	CellGrid(int numberRows, int numberColumns) noexcept;
 
 	//Getters and Setters
-	const Cell& getCell(int row, int column) const noexcept;
+	Cell& getCell(int row, int column) noexcept;
 
 	//Operators
 	friend std::ostream& operator<<(std::ostream& os, const CellGrid& cellGrid);

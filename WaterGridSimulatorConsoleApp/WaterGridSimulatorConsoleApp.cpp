@@ -7,8 +7,10 @@
 int main()
 {
     std::cout << "Hello World!\n";
-    WaterGridSimulator WaterGridSimulator(7, 10);
-    std::cout << WaterGridSimulator.getCellGrid() << std::endl;
+    WaterGridSimulator waterGridSimulator {7, 10};
+    std::cout << waterGridSimulator.getCellGrid() << std::endl;
+    waterGridSimulator.addFloor(0, 0, 1);
+    std::cout << waterGridSimulator.getCellGrid() << std::endl;
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

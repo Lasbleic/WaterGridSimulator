@@ -19,5 +19,6 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 
 void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
 {
-	// TODO
+	double volumeOfWaterReplaced = m_cellGrid.getCell(row, column).addFloor(height);
+	addWater(row, column, volumeOfWaterReplaced);
 }

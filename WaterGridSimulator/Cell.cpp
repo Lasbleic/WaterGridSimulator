@@ -35,19 +35,36 @@ double Cell::getWaterLevel() const noexcept
 	return m_waterLevel;
 }
 
-void Cell::setWaterLevel(double waterLevel) noexcept
-{
-	m_waterLevel = waterLevel;
-}
-
 int Cell::getFloorLevel() const noexcept
 {
 	return m_floorLevel;
 }
 
-void Cell::setFloorLevel(int floorLevel) noexcept
+double Cell::waterVolume() const noexcept
 {
-	m_floorLevel = floorLevel;
+	return std::max(0.0, m_waterLevel - m_floorLevel);
+}
+
+double Cell::addFloor(int floorHeight) noexcept
+{
+	assert(floorHeight >= 0 && "floorHeight must be positive");
+	// Expliciting the link between the floor height added and the volume, even if it's equal
+	double floorVolumeAdded = floorHeight * 1.0 * 1.0;
+	double volumeOfWaterReplaced = std::min(waterVolume(), floorVolumeAdded);
+	m_floorLevel += floorHeight;
+	return volumeOfWaterReplaced;
+}
+
+void Cell::addWater(double waterVolume) noexcept
+{
+	if (hasWater())
+	{
+		m_waterLevel += waterVolume;
+	}
+	else
+	{
+		m_waterLevel = m_floorLevel + waterVolume;
+	}
 }
 
 // Operators
