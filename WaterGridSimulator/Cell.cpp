@@ -8,7 +8,7 @@ Cell::Cell(int floorLevel, double waterLevel, int row, int column) noexcept
 }
 
 // Getters and Setters
-CellIdentifier Cell::getCellIdentifier() const noexcept
+const CellIdentifier& Cell::getCellIdentifier() const noexcept
 {
 	return m_cellIdentifier;
 }

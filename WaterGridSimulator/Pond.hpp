@@ -10,7 +10,7 @@ public:
 	int size() const noexcept;
 	double waterLevel() const noexcept;
 	int lowestBorderCellsFloorLevel() const noexcept;
-	CellSet lowestBorderCells() const noexcept;
+	const CellSet& lowestBorderCells() const noexcept;
 
 
 private:

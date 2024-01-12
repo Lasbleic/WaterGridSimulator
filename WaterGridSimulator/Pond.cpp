@@ -52,7 +52,7 @@ int Pond::lowestBorderCellsFloorLevel() const noexcept
 	return m_lowestBorderCells.begin()->getFloorLevel();
 }
 
-CellSet Pond::lowestBorderCells() const noexcept
+const CellSet& Pond::lowestBorderCells() const noexcept
 {
 	return m_lowestBorderCells;
 }

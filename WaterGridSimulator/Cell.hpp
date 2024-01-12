@@ -11,7 +11,7 @@ public:
 	Cell(int floorLevel, double waterLevel, int row, int column) noexcept;
 	
 	// Getters and Setters
-	CellIdentifier getCellIdentifier() const noexcept;
+	const CellIdentifier& getCellIdentifier() const noexcept;
 	bool hasWater() const noexcept;
 	double getLevel() const noexcept;
 	double getWaterLevel() const noexcept;
