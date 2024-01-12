@@ -45,8 +45,11 @@
     <ClInclude Include="CellIdentifier.hpp">
       <Filter>Fichiers d%27en-tête\Model</Filter>
     </ClInclude>
+    <ClInclude Include="CellGrid.hpp">
+      <Filter>Fichiers d%27en-tête\Model</Filter>
+    </ClInclude>
     <ClInclude Include="CellSet.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +66,9 @@
       <Filter>Fichiers sources\Model</Filter>
     </ClCompile>
     <ClCompile Include="CellIdentifier.cpp">
+      <Filter>Fichiers sources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="CellGrid.cpp">
       <Filter>Fichiers sources\Model</Filter>
     </ClCompile>
   </ItemGroup>
