@@ -2,12 +2,13 @@
 //
 
 #include <iostream>
-#include "../WaterGridSimulator/WaterGridSimulator.h"
+#include "../WaterGridSimulator/WaterGridSimulator.hpp"
 
 int main()
 {
     std::cout << "Hello World!\n";
-    fnWaterGridSimulator();
+    WaterGridSimulator WaterGridSimulator(7, 10);
+    std::cout << WaterGridSimulator.getCellGrid() << std::endl;
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage

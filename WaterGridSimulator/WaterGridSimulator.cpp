@@ -1,11 +1,23 @@
-// WaterGridSimulator.cpp : Définit les fonctions de la bibliothèque statique.
-//
-
 #include "pch.h"
 #include "framework.h"
-#include "WaterGridSimulator.h"
+#include "WaterGridSimulator.hpp"
 
-// TODO: Il s'agit d'un exemple de fonction de bibliothèque
-void fnWaterGridSimulator()
+WaterGridSimulator::WaterGridSimulator(int numberRows, int numberColumns) noexcept
+	: m_cellGrid(numberRows, numberColumns)
 {
+}
+
+const CellGrid& WaterGridSimulator::getCellGrid() const noexcept
+{
+	return m_cellGrid;
+}
+
+void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
+{
+	// TODO
+}
+
+void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
+{
+	// TODO
 }
