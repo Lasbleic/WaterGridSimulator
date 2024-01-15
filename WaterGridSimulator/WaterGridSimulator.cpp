@@ -24,15 +24,15 @@ void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
 	// TODO : update ponds if necessary
 }
 
-Pond& WaterGridSimulator::getPond(const Cell& cell) noexcept
+Pond* WaterGridSimulator::getPond(const Cell& cell) noexcept
 {
 	for (Pond& pond : m_ponds)
 	{
 		if (pond.contains(cell))
 		{
-			return pond;
+			return &pond;
 		}
 	}
 
-
+	return nullptr;
 }

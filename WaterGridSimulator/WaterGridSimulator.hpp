@@ -20,6 +20,6 @@ public:
 private:
 	CellGrid m_cellGrid;
 	std::list<Pond> m_ponds;
-	Pond& getPond(const Cell& cell) noexcept;
+	Pond* getPond(const Cell& cell) noexcept;
 
 };
