@@ -61,3 +61,47 @@ bool Pond::contains(const Cell& cell) const noexcept
 {
 	return m_waterCells.find(cell) != m_waterCells.end();
 }
+
+void Pond::onCellUpdate(const Cell& updatedCell) noexcept 
+{
+	bool isUpdatedCellBorderingPond = isBorderedBy(updatedCell);
+
+	if (!isUpdatedCellBorderingPond) 
+	{
+		// Nothing to do
+		return;
+	}
+
+	if (updatedCell.hasWater())
+	{
+		assert(false && "A cell bordering a pond has been changed to water cell, which should lead to a recompute of the ponds");
+	}
+
+	// Compute the new lowest border cells as there are too many cases to handle for doing it smartly
+	computeLowestBorderCells();
+}
+
+bool Pond::isBorderedBy(const Cell& cell) const noexcept
+{
+	return m_borderCells.find(cell) != m_borderCells.end();
+}
+
+void Pond::computeLowestBorderCells() noexcept
+{
+	int lowestBorderCellsFloorLevel = m_borderCells.begin()->getFloorLevel();
+	CellSet newLowestBorderCells;
+	for (const Cell& cell : m_borderCells)
+	{
+		if (cell.getFloorLevel() == lowestBorderCellsFloorLevel)
+		{
+			newLowestBorderCells.insert(cell);
+		}
+		else if (cell.getFloorLevel() < lowestBorderCellsFloorLevel)
+		{
+			lowestBorderCellsFloorLevel = cell.getFloorLevel();
+			newLowestBorderCells.clear();
+			newLowestBorderCells.insert(cell);
+		}
+	}
+	m_lowestBorderCells = newLowestBorderCells;
+}

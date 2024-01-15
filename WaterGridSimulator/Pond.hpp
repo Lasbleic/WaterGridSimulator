@@ -12,10 +12,13 @@ public:
 	int lowestBorderCellsFloorLevel() const noexcept;
 	const CellSet& lowestBorderCells() const noexcept;
 	bool contains(const Cell& cell) const noexcept;
+	void onCellUpdate(const Cell& updatedCell) noexcept;
 
 
 private:
 	CellSet m_waterCells;
 	CellSet m_borderCells;
 	CellSet m_lowestBorderCells;
+	bool isBorderedBy(const Cell& cell) const noexcept;
+	void computeLowestBorderCells() noexcept;
 };
