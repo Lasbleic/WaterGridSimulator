@@ -6,11 +6,14 @@ CellPosition::CellPosition(int row, int column) noexcept
 {
 }
 
-std::size_t CellPosition::getHash() const noexcept
+int CellPosition::getRow() const noexcept
 {
-	size_t rowHash = std::hash<int>()(m_row);
-	size_t colHash = std::hash<int>()(m_column) << 1;
-	return rowHash ^ colHash;
+	return m_row;
+}
+
+int CellPosition::getColumn() const noexcept
+{
+	return m_column;
 }
 
 bool operator==(const CellPosition& cellPosition1, const CellPosition& cellPosition2)
@@ -22,3 +25,11 @@ bool operator!=(const CellPosition& cellPosition1, const CellPosition& cellPosit
 {
 	return !(cellPosition1 == cellPosition2);
 }
+
+size_t CellPosition::CellPositionHasher::operator()(const CellPosition& cellPosition) const
+{
+	size_t rowHash = std::hash<int>()(cellPosition.m_row);
+	size_t colHash = std::hash<int>()(cellPosition.m_column) << 1;
+	return rowHash ^ colHash;
+}
+

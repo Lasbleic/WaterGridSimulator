@@ -8,11 +8,17 @@ public:
 	CellPosition(int row, int column) noexcept;
 
 	// Getters
-	std::size_t getHash() const noexcept;
+	int getRow() const noexcept;
+	int getColumn() const noexcept;
 
 	// Operators
 	friend bool operator==(const CellPosition&, const CellPosition&);
 	friend bool operator!=(const CellPosition&, const CellPosition&);
+
+	// Hasher
+	struct CellPositionHasher {
+		size_t operator()(const CellPosition& pos) const;
+	};
 
 private:
 	int m_row;
