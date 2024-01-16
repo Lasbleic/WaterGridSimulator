@@ -1,38 +1,39 @@
 #include "pch.h"
 #include "Pond.hpp"
 
-Pond::Pond(const CellSet& waterCells, const CellSet& borderCells)
+Pond::Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells, const CellGrid& cellGrid)
 	: m_waterCells{ waterCells }, m_borderCells{ borderCells }, m_lowestBorderCells{}
 {
 	// Check that the pond is not empty
 	assert(waterCells.size() > 0 && "Pond is created without any water cells in it");
 	
 	// Check that all water cells are water cells and have the same water level
-	double waterLevel = waterCells.begin()->getWaterLevel();
+	double waterLevel = cellGrid.getCell(*waterCells.begin()).getWaterLevel();
 
-	for (const Cell& cell : waterCells)
+	for (CellPosition cellPosition : waterCells)
 	{
-		assert(cell.getWaterLevel() == waterLevel && "Pond is created with water cells having different water levels");
-		assert(cell.hasWater() && "Pond is created with non-water cells");
+		assert(cellGrid.getCell(cellPosition).getWaterLevel() == waterLevel && "Pond is created with water cells having different water levels");
+		assert(cellGrid.getCell(cellPosition).hasWater() && "Pond is created with non-water cells");
 	}
 
 	// Check that all border cells are water less cells and are higher than the water level
-	int lowestBorderCellsFloorLevel = borderCells.begin()->getFloorLevel();
-	for (const Cell& cell : borderCells)
+	int lowestBorderCellsFloorLevel = cellGrid.getCell(*borderCells.begin()).getFloorLevel();
+	for (CellPosition cellPosition : borderCells)
 	{
+		Cell cell = cellGrid.getCell(cellPosition);
 		assert(!cell.hasWater() && "Pond is created with water cells as border cells");
 		assert(cell.getFloorLevel() > waterLevel && "Pond is created with border cells lower than the water level");
 
 		// Create the unordered_set of the lowest border cells from the border cells
 		if (cell.getFloorLevel() == lowestBorderCellsFloorLevel)
 		{
-			m_lowestBorderCells.insert(cell);
+			m_lowestBorderCells.insert(cellPosition);
 		}
 		else if (cell.getFloorLevel() < lowestBorderCellsFloorLevel)
 		{
 			lowestBorderCellsFloorLevel = cell.getFloorLevel();
 			m_lowestBorderCells.clear();
-			m_lowestBorderCells.insert(cell);
+			m_lowestBorderCells.insert(cellPosition);
 		}
 	}
 }
@@ -43,71 +44,12 @@ int Pond::size() const noexcept
 	return static_cast<int>(m_waterCells.size());
 }
 
-double Pond::waterLevel() const noexcept
-{
-	return m_waterCells.begin()->getWaterLevel();
-}
-
-int Pond::lowestBorderCellsFloorLevel() const noexcept
-{
-	return m_lowestBorderCells.begin()->getFloorLevel();
-}
-
-const CellSet& Pond::lowestBorderCells() const noexcept
+const CellPositionSet& Pond::getLowestBorderCells() const noexcept
 {
 	return m_lowestBorderCells;
 }
 
-bool Pond::contains(const Cell& cell) const noexcept
-{
-	return m_waterCells.find(cell) != m_waterCells.end();
-}
-
-void Pond::onCellUpdate(const Cell& updatedCell) noexcept 
-{
-	bool isUpdatedCellBorderingPond = isBorderedBy(updatedCell);
-
-	if (!isUpdatedCellBorderingPond) 
-	{
-		// Nothing to do
-		return;
-	}
-
-	if (updatedCell.hasWater())
-	{
-		assert(false && "A cell bordering a pond has been changed to water cell, which should lead to a recompute of the ponds");
-	}
-
-	// Compute the new lowest border cells as there are too many cases to handle for doing it smartly
-	computeLowestBorderCells();
-}
-
-bool Pond::isBorderedBy(const Cell& cell) const noexcept
-{
-	return m_borderCells.find(cell) != m_borderCells.end();
-}
-
-void Pond::computeLowestBorderCells() noexcept
-{
-	int lowestBorderCellsFloorLevel = m_borderCells.begin()->getFloorLevel();
-	CellSet newLowestBorderCells;
-	for (const Cell& cell : m_borderCells)
-	{
-		if (cell.getFloorLevel() == lowestBorderCellsFloorLevel)
-		{
-			newLowestBorderCells.insert(cell);
-		}
-		else if (cell.getFloorLevel() < lowestBorderCellsFloorLevel)
-		{
-			lowestBorderCellsFloorLevel = cell.getFloorLevel();
-			newLowestBorderCells.clear();
-			newLowestBorderCells.insert(cell);
-		}
-	}
-	m_lowestBorderCells = newLowestBorderCells;
-}
-
-const CellSet& Pond::getWaterCells() const noexcept
+const CellPositionSet& Pond::getWaterCells() const noexcept
 {
 	return m_waterCells;
 }

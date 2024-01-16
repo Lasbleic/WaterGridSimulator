@@ -1,25 +1,20 @@
 #include "pch.h"
 #include "Cell.hpp"
-#include "CellSet.hpp"
+#include "CellPositionSet.hpp"
+#include "CellGrid.hpp"
 
 
 class Pond
 {
 public:
-	Pond(const CellSet& waterCells, const CellSet& borderCells);
+	Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells, const CellGrid& cellGrid);
 	int size() const noexcept;
-	double waterLevel() const noexcept;
-	int lowestBorderCellsFloorLevel() const noexcept;
-	const CellSet& lowestBorderCells() const noexcept;
-	bool contains(const Cell& cell) const noexcept;
-	void onCellUpdate(const Cell& updatedCell) noexcept;
-	const CellSet& getWaterCells() const noexcept;
+	const CellPositionSet& getLowestBorderCells() const noexcept;
+	const CellPositionSet& getWaterCells() const noexcept;
 
 
 private:
-	CellSet m_waterCells;
-	CellSet m_borderCells;
-	CellSet m_lowestBorderCells;
-	bool isBorderedBy(const Cell& cell) const noexcept;
-	void computeLowestBorderCells() noexcept;
+	CellPositionSet m_waterCells;
+	CellPositionSet m_borderCells;
+	CellPositionSet m_lowestBorderCells;
 };

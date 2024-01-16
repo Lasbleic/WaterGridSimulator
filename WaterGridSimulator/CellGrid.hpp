@@ -12,6 +12,7 @@ public:
 
 	//Getters and Setters
 	Cell& getCell(int row, int column) noexcept;
+	const Cell& getCell(const CellPosition&) const noexcept;
 	int getNumberRows() const noexcept;
 	int getNumberColumns() const noexcept;
 
