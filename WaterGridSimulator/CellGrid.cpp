@@ -14,9 +14,9 @@ CellGrid::CellGrid(int numberRows, int numberColumns) noexcept
 	}
 }
 
-Cell& CellGrid::getCell(int row, int column) noexcept
+Cell& CellGrid::getCell(const CellPosition& cellPosition) noexcept
 {
-	return m_cellGrid[row][column];
+	return m_cellGrid[cellPosition.getRow()][cellPosition.getColumn()];
 }
 
 const Cell& CellGrid::getCell(const CellPosition& cellPosition) const noexcept

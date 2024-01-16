@@ -11,7 +11,7 @@ public:
 	CellGrid(int numberRows, int numberColumns) noexcept;
 
 	//Getters and Setters
-	Cell& getCell(int row, int column) noexcept;
+	Cell& getCell(const CellPosition&) noexcept;
 	const Cell& getCell(const CellPosition&) const noexcept;
 	int getNumberRows() const noexcept;
 	int getNumberColumns() const noexcept;

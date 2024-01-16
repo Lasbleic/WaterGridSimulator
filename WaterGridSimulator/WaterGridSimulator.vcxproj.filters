@@ -48,7 +48,7 @@
     <ClInclude Include="CellGrid.hpp">
       <Filter>Fichiers d%27en-tête\Model</Filter>
     </ClInclude>
-    <ClInclude Include="CellSet.hpp">
+    <ClInclude Include="CellPositionSet.hpp">
       <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
   </ItemGroup>
