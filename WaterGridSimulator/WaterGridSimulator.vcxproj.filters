@@ -42,7 +42,7 @@
     <ClInclude Include="Pond.hpp">
       <Filter>Fichiers d%27en-tête\Model</Filter>
     </ClInclude>
-    <ClInclude Include="CellIdentifier.hpp">
+    <ClInclude Include="CellPosition.hpp">
       <Filter>Fichiers d%27en-tête\Model</Filter>
     </ClInclude>
     <ClInclude Include="CellGrid.hpp">
@@ -65,7 +65,7 @@
     <ClCompile Include="Pond.cpp">
       <Filter>Fichiers sources\Model</Filter>
     </ClCompile>
-    <ClCompile Include="CellIdentifier.cpp">
+    <ClCompile Include="CellPosition.cpp">
       <Filter>Fichiers sources\Model</Filter>
     </ClCompile>
     <ClCompile Include="CellGrid.cpp">

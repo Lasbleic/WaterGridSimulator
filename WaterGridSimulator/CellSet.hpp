@@ -8,7 +8,7 @@ struct CellHasher
 	std::size_t operator()(const Cell& cell) const noexcept
 	{
 		// Return the hash of the cell identifier
-		return cell.getCellIdentifier().getIdentifierHash();
+		return cell.getCellPosition().getHash();
 	}
 };
 

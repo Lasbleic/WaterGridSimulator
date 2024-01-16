@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include "CellIdentifier.hpp"
+#include "CellPosition.hpp"
 
 class Cell
 {
@@ -11,7 +11,7 @@ public:
 	Cell(int floorLevel, double waterLevel, int row, int column) noexcept;
 	
 	// Getters
-	const CellIdentifier& getCellIdentifier() const noexcept;
+	const CellPosition& getCellPosition() const noexcept;
 	bool hasWater() const noexcept;
 	double getLevel() const noexcept;
 	double getWaterLevel() const noexcept;
@@ -29,7 +29,7 @@ public:
 	friend bool operator!=(const Cell& cell1, const Cell& cell2);
 
 private:
-	CellIdentifier m_cellIdentifier;
+	CellPosition m_cellPosition;
 	int m_floorLevel;
 	double m_waterLevel;
 

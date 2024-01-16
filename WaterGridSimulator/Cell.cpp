@@ -3,14 +3,14 @@
 
 // Constructors
 Cell::Cell(int floorLevel, double waterLevel, int row, int column) noexcept
-	: m_floorLevel(floorLevel), m_waterLevel(waterLevel), m_cellIdentifier(row, column)
+	: m_floorLevel(floorLevel), m_waterLevel(waterLevel), m_cellPosition(row, column)
 {
 }
 
 // Getters and Setters
-const CellIdentifier& Cell::getCellIdentifier() const noexcept
+const CellPosition& Cell::getCellPosition() const noexcept
 {
-	return m_cellIdentifier;
+	return m_cellPosition;
 }
 
 bool Cell::hasWater() const noexcept
@@ -84,7 +84,7 @@ std::ostream& operator<<(std::ostream& os, const Cell& cell)
 
 bool operator==(const Cell& cell1, const Cell& cell2)
 {
-	return cell1.m_cellIdentifier == cell2.m_cellIdentifier;
+	return cell1.m_cellPosition == cell2.m_cellPosition;
 }
 
 bool operator!=(const Cell& cell1, const Cell& cell2)
