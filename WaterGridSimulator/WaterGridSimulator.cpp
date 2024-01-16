@@ -2,18 +2,6 @@
 #include "framework.h"
 #include "WaterGridSimulator.hpp"
 
-// Write a lambda to create a hash function for std::pair<int, int>
-
-struct PairHasher
-{
-	std::size_t operator()(const std::pair<int, int>& pair) const noexcept
-	{
-		// Return the hash of the pair
-		return std::hash<int>()(pair.first) ^ std::hash<int>()(pair.second) << 1;
-	}
-};
-using CellPositionSet = std::unordered_set<std::pair<int, int>, PairHasher>;
-
 WaterGridSimulator::WaterGridSimulator(int numberRows, int numberColumns) noexcept
 	: m_cellGrid(numberRows, numberColumns)
 {
@@ -26,29 +14,36 @@ const CellGrid& WaterGridSimulator::getCellGrid() const noexcept
 
 void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 {
-	Cell& updatedCell = m_cellGrid.getCell(row, column);
+	CellPosition updatedCellPosition{ row, column };
+	Cell& updatedCell = m_cellGrid.getCell(updatedCellPosition);
 	bool hasUpdatedCellWater = updatedCell.hasWater();
 	if (hasUpdatedCellWater)
 	{
-		Pond pond = getPond(row, column);
+		Pond pond = getPond(updatedCellPosition);
+		double pondWaterLevel = updatedCell.getWaterLevel();
+		double pondLowestBorderLevel = m_cellGrid.getCell(*pond.getLowestBorderCells().begin()).getFloorLevel();
+
 		double addedVolumeByCell = volume / pond.size();
 		double overflowingVolume = 0;
-		if (pond.waterLevel() + addedVolumeByCell > pond.lowestBorderCellsFloorLevel())
+
+		if (pondWaterLevel + addedVolumeByCell > pondLowestBorderLevel)
 		{
-			addedVolumeByCell = pond.lowestBorderCellsFloorLevel() - pond.waterLevel();
+			addedVolumeByCell = pondLowestBorderLevel - pondWaterLevel;
 			overflowingVolume = volume - addedVolumeByCell * pond.size();
 		}
 
-		CellSet waterCells = pond.getWaterCells();
-		for (Cell cell : waterCells) {
+		CellPositionSet waterCells = pond.getWaterCells();
+		for (CellPosition waterCellPosition : waterCells) {
+			Cell cell = m_cellGrid.getCell(waterCellPosition);
 			cell.addWater(addedVolumeByCell);
 		}
 
 		if (overflowingVolume > 0)
 		{
-			for (auto it = pond.lowestBorderCells().begin(); it != pond.lowestBorderCells().end(); ++it) {
-				Cell cell = *it;
-				cell.addWater(overflowingVolume / pond.lowestBorderCells().size());
+			CellPositionSet lowestBorderCells = pond.getLowestBorderCells();
+			for (CellPosition lowestBorderCellPosition : lowestBorderCells) {
+				Cell cell = m_cellGrid.getCell(lowestBorderCellPosition);
+				cell.addWater(overflowingVolume / lowestBorderCells.size());
 			}
 		}
 	}
@@ -59,30 +54,30 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 		CellPositionSet cellsPositionsToVisit;
 		CellPositionSet cellsPositionToAddWaterTo;
 		// We separe the "cells to visit" in two sets to keep track of the distance from the updated cell
-		CellPositionSet cellsPositionsToVisitNextStep{ std::pair<int, int>(row, column) };
+		CellPositionSet cellsPositionsToVisitNextStep{ updatedCellPosition };
 		while (!cellsPositionsToVisitNextStep.empty() && cellsPositionToAddWaterTo.empty())
 		{
-			for (std::pair<int, int> positionPair : cellsPositionsToVisitNextStep)
+			for (CellPosition cellPosition : cellsPositionsToVisitNextStep)
 			{
-				cellsPositionsToVisit.insert(positionPair);
+				cellsPositionsToVisit.insert(cellPosition);
 			}
 			cellsPositionsToVisitNextStep.clear();
 
-			for (std::pair<int, int> positionPair : cellsPositionsToVisit)
+			for (CellPosition cellPosition : cellsPositionsToVisit)
 			{
-				int row = positionPair.first;
-				int column = positionPair.second;
+				int row = cellPosition.getRow();
+				int column = cellPosition.getColumn();
 				if (row < 0 || row >= m_cellGrid.getNumberRows() || column < 0 || column >= m_cellGrid.getNumberColumns())
 				{
 					// If the cell is out of the grid, we add it to the set of cells to add water to and continue
-					cellsPositionToAddWaterTo.insert(positionPair);
+					cellsPositionToAddWaterTo.insert(cellPosition);
 					continue;
 				}
 				
-				Cell& cellToVisit = m_cellGrid.getCell(row, column);
+				Cell& cellToVisit = m_cellGrid.getCell(cellPosition);
 				if (cellToVisit.getLevel() < updatedCell.getLevel())
 				{
-					cellsPositionToAddWaterTo.insert(positionPair);
+					cellsPositionToAddWaterTo.insert(cellPosition);
 				}
 				else
 				{
@@ -92,7 +87,7 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 						// as water won't flow through them
 						continue;
 					}
-					for (std::pair<int, int> neighborPositionPair : getNeighborCells(row, column, true))
+					for (CellPosition neighborPositionPair : getNeighborCells(cellPosition, true))
 					{
 						if (visitedCellsPositions.find(neighborPositionPair) == visitedCellsPositions.end())
 						{
@@ -100,23 +95,23 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 						}
 					}
 				}
-				visitedCellsPositions.insert(positionPair);
+				visitedCellsPositions.insert(cellPosition);
 			}
 			cellsPositionsToVisit.clear();
 
 			if (!cellsPositionToAddWaterTo.empty())
 			{
-				for (std::pair<int, int> positionPair : cellsPositionToAddWaterTo)
+				for (CellPosition cellPosition : cellsPositionToAddWaterTo)
 				{
-					int row = positionPair.first;
-					int column = positionPair.second;
+					int row = cellPosition.getRow();
+					int column = cellPosition.getColumn();
 					if (row < 0 || row >= m_cellGrid.getNumberRows() || column < 0 || column >= m_cellGrid.getNumberColumns())
 					{
 						// If the cell is out of the grid, we don't add water to it
 						// TODO: keep track of the volume of water that has been lost
 						continue;
 					}
-					m_cellGrid.getCell(row, column).addWater(volume / cellsPositionToAddWaterTo.size());
+					m_cellGrid.getCell(cellPosition).addWater(volume / cellsPositionToAddWaterTo.size());
 				}
 			}
 		}
@@ -126,11 +121,9 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 		{
 			// If we haven't found any cell that is lower than the updated cell. In that case,
 			// we add the water to every visited cell
-			for (std::pair<int, int> positionPair : visitedCellsPositions)
+			for (CellPosition cellPosition : visitedCellsPositions)
 			{
-				int row = positionPair.first;
-				int column = positionPair.second;
-				m_cellGrid.getCell(row, column).addWater(volume / visitedCellsPositions.size());
+				m_cellGrid.getCell(cellPosition).addWater(volume / visitedCellsPositions.size());
 			}
 		}
 
@@ -139,41 +132,40 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 
 void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
 {
-	double volumeOfWaterReplaced = m_cellGrid.getCell(row, column).addFloor(height);
+	CellPosition updatedCellPosition{ row, column };
+	double volumeOfWaterReplaced = m_cellGrid.getCell(updatedCellPosition).addFloor(height);
 	if (volumeOfWaterReplaced > 0) {
 		addWater(row, column, volumeOfWaterReplaced);
 	}
 }
 
-Pond WaterGridSimulator::getPond(int initialRow, int initialColumn) noexcept
+Pond WaterGridSimulator::getPond(const CellPosition& cellPosition) noexcept
 {
-	assert(m_cellGrid.getCell(initialRow, initialColumn).hasWater() && "The pond should only be got from a water cell");
+	assert(m_cellGrid.getCell(cellPosition).hasWater() && "The pond should only be got from a water cell");
 
-	CellSet waterCells;
-	CellSet borderCells;
+	CellPositionSet waterCells;
+	CellPositionSet borderCells;
 	CellPositionSet visitedCellsPositions;
 	CellPositionSet cellsPositionsToVisit;
 	//Add the pair of the coordinates of the cell to visit
-	cellsPositionsToVisit.insert(std::pair<int, int>{initialRow, initialColumn});
+	cellsPositionsToVisit.insert(cellPosition);
 
 	while (!cellsPositionsToVisit.empty())
 	{
-		std::pair<int, int> positionPair = *cellsPositionsToVisit.begin();
+		CellPosition currentCellPosition = *cellsPositionsToVisit.begin();
 		cellsPositionsToVisit.erase(cellsPositionsToVisit.begin());
-		visitedCellsPositions.insert(positionPair);
+		visitedCellsPositions.insert(currentCellPosition);
 
-		int row = positionPair.first;
-		int column = positionPair.second;
-		Cell& cellToVisit = m_cellGrid.getCell(row, column);
+		Cell& cellToVisit = m_cellGrid.getCell(currentCellPosition);
 		
 		if (!cellToVisit.hasWater())
 		{
-			borderCells.insert(cellToVisit);
+			borderCells.insert(currentCellPosition);
 			continue;
 		}
 
-		waterCells.insert(cellToVisit);
-		for (std::pair<int, int> positionPair : getNeighborCells(row, column))
+		waterCells.insert(currentCellPosition);
+		for (CellPosition positionPair : getNeighborCells(currentCellPosition))
 		{
 			if (visitedCellsPositions.find(positionPair) == visitedCellsPositions.end())
 			{
@@ -182,27 +174,35 @@ Pond WaterGridSimulator::getPond(int initialRow, int initialColumn) noexcept
 		}
 	}
 
-	return Pond{ waterCells, borderCells };
+	return Pond{ waterCells, borderCells, m_cellGrid };
 }
 
-std::vector<std::pair<int, int>> WaterGridSimulator::getNeighborCells(int row, int column, bool includeOutOfBoundaries) noexcept
+std::vector<CellPosition> WaterGridSimulator::getNeighborCells(const CellPosition& cellPosition, bool includeOutOfBoundaries) noexcept
 {
-	std::vector<std::pair<int, int>> neighborCells;
+	int row = cellPosition.getRow();
+	int column = cellPosition.getColumn();
+
+	std::vector<CellPosition> neighborCells;
+
 	if (row > 0 || includeOutOfBoundaries)
 	{
-		neighborCells.push_back(std::pair<int, int>{row - 1, column});
+		neighborCells.push_back(CellPosition{row - 1, column});
 	}
+
 	if (row < m_cellGrid.getNumberRows() - 1 || includeOutOfBoundaries)
 	{
-		neighborCells.push_back(std::pair<int, int>{row + 1, column});
+		neighborCells.push_back(CellPosition{row + 1, column});
 	}
+
 	if (column > 0 || includeOutOfBoundaries)
 	{
-		neighborCells.push_back(std::pair<int, int>{row, column - 1});
+		neighborCells.push_back(CellPosition{row, column - 1});
 	}
+
 	if (column < m_cellGrid.getNumberColumns() - 1 || includeOutOfBoundaries)
 	{
-		neighborCells.push_back(std::pair<int, int>{row, column + 1});
+		neighborCells.push_back(CellPosition{row, column + 1});
 	}
+
 	return neighborCells;
 }
