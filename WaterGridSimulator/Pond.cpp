@@ -22,7 +22,7 @@ Pond::Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells
 	{
 		Cell cell = cellGrid.getCell(cellPosition);
 		assert(!cell.hasWater() && "Pond is created with water cells as border cells");
-		assert(cell.getFloorLevel() > waterLevel && "Pond is created with border cells lower than the water level");
+		assert(cell.getFloorLevel() >= waterLevel && "Pond is created with border cells lower than the water level");
 
 		// Create the unordered_set of the lowest border cells from the border cells
 		if (cell.getFloorLevel() == lowestBorderCellsFloorLevel)
