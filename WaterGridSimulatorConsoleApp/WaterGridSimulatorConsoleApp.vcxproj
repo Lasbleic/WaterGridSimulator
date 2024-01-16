@@ -127,12 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="WaterGridSimulatorConsoleApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\WaterGridSimulator\WaterGridSimulator.vcxproj">
       <Project>{97421dab-15e7-41d0-a023-3bf5ae068db9}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Command.hpp" />
+    <ClInclude Include="WaterGridSimulatorConsoleApp.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

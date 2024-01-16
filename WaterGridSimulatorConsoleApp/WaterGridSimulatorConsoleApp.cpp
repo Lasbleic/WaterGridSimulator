@@ -2,15 +2,70 @@
 //
 
 #include <iostream>
-#include "../WaterGridSimulator/WaterGridSimulator.hpp"
+#include "WaterGridSimulatorConsoleApp.hpp"
+#include "Command.hpp"
+
+
+WaterGridSimulator createNewWaterGridSimulatorWizard() {
+	std::cout << "Please enter the number of rows of the water grid: ";
+	// Ask user for number of rows
+	int numberRow;
+	std::cin >> numberRow;
+	std::cout << "Please enter the number of columns of the water grid: ";
+	// Ask user for number of columns
+	int numberColumn;
+	std::cin >> numberColumn;
+	// Create a new WaterGridSimulator with the given number of rows and columns
+	WaterGridSimulator waterGridSimulator = createWaterGridSimulator(numberRow, numberColumn);
+	std::cout << waterGridSimulator.getCellGrid() << std::endl;
+	return waterGridSimulator;
+}
+
+WaterGridSimulator createWaterGridSimulator(int numberRow, int numberColumn) {
+	WaterGridSimulator waterGridSimulator{ numberRow, numberColumn };
+	for (int i = 0; i < numberRow; i++) {
+		for (int j = 0; j < numberColumn; j++) {
+			if (i == 0 || i == numberRow - 1 || j == 0 || j == numberColumn - 1) {
+				waterGridSimulator.addFloor(i, j, 2);
+			}
+		}
+	}
+	if (numberRow > 2 && numberColumn > 2) {
+		waterGridSimulator.addWater(1, 1, (numberRow - 2) * (numberColumn - 2));
+	}
+	return waterGridSimulator;
+}
 
 int main()
 {
-    std::cout << "Hello World!\n";
-    WaterGridSimulator waterGridSimulator {7, 10};
-    std::cout << waterGridSimulator.getCellGrid() << std::endl;
-    waterGridSimulator.addFloor(0, 0, 1);
-    std::cout << waterGridSimulator.getCellGrid() << std::endl;
+	std::cout << "Welcome to the Water Grid Simulator!\n";
+	WaterGridSimulator waterGridSimulator = createNewWaterGridSimulatorWizard();
+	while (true) {
+		std::cout << "> ";
+		Command command;
+		try {
+			std::cin >> command;
+		}
+		catch (std::invalid_argument& e) {
+			std::cout << "Unknown command. Commands are :" << std::endl;
+			std::cout << " -\"new\"" << std::endl;
+			std::cout << " -\"exit\"" << std::endl;
+			std::cout << " -\"addWater [row] [column] [volume]\"" << std::endl;
+			std::cout << " -\"addFloor [row] [column] [level]\"" << std::endl;
+			continue;
+		}
+		if (command.getCommandType() == CommandType::Exit) {
+			break;
+		}
+		if (command.getCommandType() == CommandType::NewWaterGridSimulator) {
+			waterGridSimulator = createNewWaterGridSimulatorWizard();
+		}
+		else 
+		{
+			command.execute(waterGridSimulator);
+			std::cout << waterGridSimulator.getCellGrid() << std::endl;
+		}
+	}
 }
 
 // Exécuter le programme : Ctrl+F5 ou menu Déboguer > Exécuter sans débogage
