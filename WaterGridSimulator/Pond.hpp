@@ -13,6 +13,7 @@ public:
 	const CellSet& lowestBorderCells() const noexcept;
 	bool contains(const Cell& cell) const noexcept;
 	void onCellUpdate(const Cell& updatedCell) noexcept;
+	const CellSet& getWaterCells() const noexcept;
 
 
 private:

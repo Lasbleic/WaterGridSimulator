@@ -9,6 +9,7 @@ Pond::Pond(const CellSet& waterCells, const CellSet& borderCells)
 	
 	// Check that all water cells are water cells and have the same water level
 	double waterLevel = waterCells.begin()->getWaterLevel();
+
 	for (const Cell& cell : waterCells)
 	{
 		assert(cell.getWaterLevel() == waterLevel && "Pond is created with water cells having different water levels");
@@ -104,4 +105,9 @@ void Pond::computeLowestBorderCells() noexcept
 		}
 	}
 	m_lowestBorderCells = newLowestBorderCells;
+}
+
+const CellSet& Pond::getWaterCells() const noexcept
+{
+	return m_waterCells;
 }
