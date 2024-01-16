@@ -34,7 +34,7 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 
 		CellPositionSet waterCells = pond.getWaterCells();
 		for (CellPosition waterCellPosition : waterCells) {
-			Cell cell = m_cellGrid.getCell(waterCellPosition);
+			Cell& cell = m_cellGrid.getCell(waterCellPosition);
 			cell.addWater(addedVolumeByCell);
 		}
 
@@ -42,7 +42,7 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 		{
 			CellPositionSet lowestBorderCells = pond.getLowestBorderCells();
 			for (CellPosition lowestBorderCellPosition : lowestBorderCells) {
-				Cell cell = m_cellGrid.getCell(lowestBorderCellPosition);
+				Cell& cell = m_cellGrid.getCell(lowestBorderCellPosition);
 				cell.addWater(overflowingVolume / lowestBorderCells.size());
 			}
 		}
