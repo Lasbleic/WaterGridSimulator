@@ -2,8 +2,8 @@
 #include "Cell.hpp"
 
 // Constructors
-Cell::Cell(int floorLevel, double waterLevel, int row, int column) noexcept
-	: m_floorLevel(floorLevel), m_waterLevel(waterLevel), m_cellPosition(row, column)
+Cell::Cell(int floorLevel, double waterVolume, int row, int column) noexcept
+	: m_floorLevel(floorLevel), m_waterVolume(waterVolume), m_cellPosition(row, column)
 {
 }
 
@@ -15,34 +15,12 @@ const CellPosition& Cell::getCellPosition() const noexcept
 
 bool Cell::hasWater() const noexcept
 {
-	return m_waterLevel > m_floorLevel;
+	return m_waterVolume > 0;
 }
 
 double Cell::getLevel() const noexcept
 {
-	if (hasWater())
-	{
-		return m_waterLevel;
-	}
-	else
-	{
-		return m_floorLevel;
-	}
-}
-
-double Cell::getWaterLevel() const noexcept
-{
-	return m_waterLevel;
-}
-
-int Cell::getFloorLevel() const noexcept
-{
-	return m_floorLevel;
-}
-
-double Cell::waterVolume() const noexcept
-{
-	return std::max(0.0, m_waterLevel - m_floorLevel);
+	return m_floorLevel + m_waterVolume;
 }
 
 double Cell::addFloor(int floorHeight) noexcept
@@ -50,21 +28,15 @@ double Cell::addFloor(int floorHeight) noexcept
 	assert(floorHeight >= 0 && "floorHeight must be positive");
 	// Expliciting the link between the floor height added and the volume, even if it's equal
 	double floorVolumeAdded = floorHeight * 1.0 * 1.0;
-	double volumeOfWaterReplaced = std::min(waterVolume(), floorVolumeAdded);
+	double volumeOfWaterReplaced = std::min(m_waterVolume, floorVolumeAdded);
 	m_floorLevel += floorHeight;
+	m_waterVolume -= volumeOfWaterReplaced;
 	return volumeOfWaterReplaced;
 }
 
 void Cell::addWater(double waterVolume) noexcept
 {
-	if (hasWater())
-	{
-		m_waterLevel += waterVolume;
-	}
-	else
-	{
-		m_waterLevel = m_floorLevel + waterVolume;
-	}
+	m_waterVolume += waterVolume;
 }
 
 // Operators
@@ -73,7 +45,7 @@ std::ostream& operator<<(std::ostream& os, const Cell& cell)
 	if (cell.hasWater()) 
 	{
 		// Print the water level in blue with a precision of 1 decimal
-		os << "\033[36m" << std::fixed << std::setprecision(1) << cell.m_waterLevel << "\033[0m";
+		os << "\033[36m" << std::fixed << std::setprecision(1) << cell.getLevel() << "\033[0m";
 	}
 	else 
 	{

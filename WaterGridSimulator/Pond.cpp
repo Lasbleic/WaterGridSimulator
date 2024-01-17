@@ -8,30 +8,30 @@ Pond::Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells
 	assert(waterCells.size() > 0 && "Pond is created without any water cells in it");
 	
 	// Check that all water cells are water cells and have the same water level
-	double waterLevel = cellGrid.getCell(*waterCells.begin()).getWaterLevel();
+	double waterLevel = cellGrid.getCell(*waterCells.begin()).getLevel();
 
 	for (CellPosition cellPosition : waterCells)
 	{
-		assert(cellGrid.getCell(cellPosition).getWaterLevel() == waterLevel && "Pond is created with water cells having different water levels");
+		assert(cellGrid.getCell(cellPosition).getLevel() == waterLevel && "Pond is created with water cells having different water levels");
 		assert(cellGrid.getCell(cellPosition).hasWater() && "Pond is created with non-water cells");
 	}
 
 	// Check that all border cells are water less cells and are higher than the water level
-	int lowestBorderCellsFloorLevel = cellGrid.getCell(*borderCells.begin()).getFloorLevel();
+	double lowestBorderCellsFloorLevel = cellGrid.getCell(*borderCells.begin()).getLevel();
 	for (CellPosition cellPosition : borderCells)
 	{
 		Cell cell = cellGrid.getCell(cellPosition);
 		assert(!cell.hasWater() && "Pond is created with water cells as border cells");
-		assert(cell.getFloorLevel() >= waterLevel && "Pond is created with border cells lower than the water level");
+		assert(cell.getLevel() >= waterLevel && "Pond is created with border cells lower than the water level");
 
 		// Create the unordered_set of the lowest border cells from the border cells
-		if (cell.getFloorLevel() == lowestBorderCellsFloorLevel)
+		if (cell.getLevel() == lowestBorderCellsFloorLevel)
 		{
 			m_lowestBorderCells.insert(cellPosition);
 		}
-		else if (cell.getFloorLevel() < lowestBorderCellsFloorLevel)
+		else if (cell.getLevel() < lowestBorderCellsFloorLevel)
 		{
-			lowestBorderCellsFloorLevel = cell.getFloorLevel();
+			lowestBorderCellsFloorLevel = cell.getLevel();
 			m_lowestBorderCells.clear();
 			m_lowestBorderCells.insert(cellPosition);
 		}

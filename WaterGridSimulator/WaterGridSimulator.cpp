@@ -20,8 +20,8 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 	if (hasUpdatedCellWater)
 	{
 		Pond pond = getPond(updatedCellPosition);
-		double pondWaterLevel = updatedCell.getWaterLevel();
-		double pondLowestBorderLevel = m_cellGrid.getCell(*pond.getLowestBorderCells().begin()).getFloorLevel();
+		double pondWaterLevel = updatedCell.getLevel();
+		double pondLowestBorderLevel = m_cellGrid.getCell(*pond.getLowestBorderCells().begin()).getLevel();
 
 		double addedVolumeByCell = volume / pond.size();
 		double overflowingVolume = 0;

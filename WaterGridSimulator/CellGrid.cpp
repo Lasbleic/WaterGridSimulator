@@ -8,7 +8,7 @@ CellGrid::CellGrid(int numberRows, int numberColumns) noexcept
 		std::vector<Cell> cellRow;
 		for (int column = 0; column < numberColumns; column++)
 		{
-			cellRow.push_back(Cell(0, 0, row, column));
+			cellRow.push_back(Cell{ 0, 0, row, column });
 		}
 		m_cellGrid.push_back(cellRow);
 	}

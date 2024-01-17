@@ -8,15 +8,12 @@ class Cell
 public:
 	// Constructors
 	Cell() = delete;
-	Cell(int floorLevel, double waterLevel, int row, int column) noexcept;
+	Cell(int floorLevel, double waterVolume, int row, int column) noexcept;
 	
 	// Getters
 	const CellPosition& getCellPosition() const noexcept;
 	bool hasWater() const noexcept;
 	double getLevel() const noexcept;
-	double getWaterLevel() const noexcept;
-	int getFloorLevel() const noexcept;
-
 
 	// Methods
 	// Returns the volume of water that has been replaced by the floor
@@ -31,7 +28,5 @@ public:
 private:
 	CellPosition m_cellPosition;
 	int m_floorLevel;
-	double m_waterLevel;
-
-	double waterVolume() const noexcept;
+	double m_waterVolume;
 };
