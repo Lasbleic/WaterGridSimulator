@@ -13,9 +13,13 @@ const CellGrid& WaterGridSimulator::getCellGrid() const noexcept
 	return m_cellGrid;
 }
 
-void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
+void WaterGridSimulator::addWater(int row, int column, double volume)
 {
-	CellPosition updatedCellPosition{ row, column };
+	addWater(CellPosition{ row, column }, volume);
+}
+
+void WaterGridSimulator::addWater(const CellPosition& updatedCellPosition, double volume)
+{
 	Cell& updatedCell = m_cellGrid.getCell(updatedCellPosition);
 	if (updatedCell.hasWater())
 	{
@@ -27,7 +31,7 @@ void WaterGridSimulator::addWater(int row, int column, double volume) noexcept
 	}
 }
 
-void WaterGridSimulator::addWaterOnWaterCell(CellPosition updatedCellPosition, double volume)
+void WaterGridSimulator::addWaterOnWaterCell(const CellPosition& updatedCellPosition, double volume)
 {
 	Cell& updatedCell = m_cellGrid.getCell(updatedCellPosition);
 	
@@ -54,12 +58,12 @@ void WaterGridSimulator::addWaterOnWaterCell(CellPosition updatedCellPosition, d
 	{
 		CellPositionSet lowestBorderCells = pond.getLowestBorderCells();
 		for (CellPosition lowestBorderCellPosition : lowestBorderCells) {
-			addWater(lowestBorderCellPosition.getRow(), lowestBorderCellPosition.getColumn(), overflowingVolume / lowestBorderCells.size());
+			addWater(lowestBorderCellPosition, overflowingVolume / lowestBorderCells.size());
 		}
 	}
 }
 
-void WaterGridSimulator::addWaterOnFloorCell(CellPosition updatedCellPosition, double volume)
+void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosition, double volume)
 {
 	Cell& updatedCell = m_cellGrid.getCell(updatedCellPosition);
 
@@ -118,15 +122,13 @@ void WaterGridSimulator::addWaterOnFloorCell(CellPosition updatedCellPosition, d
 		{
 			for (CellPosition cellPosition : cellsPositionToAddWaterTo)
 			{
-				int row = cellPosition.getRow();
-				int column = cellPosition.getColumn();
 				if (isPositionOutOfGrid(cellPosition, m_cellGrid))
 				{
 					// If the cell is out of the grid, we don't add water to it
 					// TODO: keep track of the volume of water that has been lost
 					continue;
 				}
-				addWater(row, column, volume / cellsPositionToAddWaterTo.size());
+				addWater(cellPosition, volume / cellsPositionToAddWaterTo.size());
 			}
 		}
 	}
@@ -143,11 +145,11 @@ void WaterGridSimulator::addWaterOnFloorCell(CellPosition updatedCellPosition, d
 	}
 }
 
-void WaterGridSimulator::addFloor(int row, int column, int height) noexcept
+void WaterGridSimulator::addFloor(int row, int column, int height)
 {
 	CellPosition updatedCellPosition{ row, column };
 	double volumeOfWaterReplaced = m_cellGrid.getCell(updatedCellPosition).addFloor(height);
 	if (volumeOfWaterReplaced > 0) {
-		addWater(row, column, volumeOfWaterReplaced);
+		addWater(updatedCellPosition, volumeOfWaterReplaced);
 	}
 }

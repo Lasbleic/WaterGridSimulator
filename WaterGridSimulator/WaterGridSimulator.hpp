@@ -14,11 +14,12 @@ public:
 	const CellGrid& getCellGrid() const noexcept;
 
 	//Methods
-	void addWater(int row, int column, double volume) noexcept;
-	void addFloor(int row, int column, int height) noexcept;
+	void addWater(int row, int column, double volume);
+	void addFloor(int row, int column, int height);
 
 private:
-	void addWaterOnWaterCell(CellPosition updatedCellPosition, double volume);
-	void addWaterOnFloorCell(CellPosition updatedCellPosition, double volume);
+	void addWater(const CellPosition& updatedCellPosition, double volume);
+	void addWaterOnWaterCell(const CellPosition& updatedCellPosition, double volume);
+	void addWaterOnFloorCell(const CellPosition& updatedCellPosition, double volume);
 	CellGrid m_cellGrid;
 };
