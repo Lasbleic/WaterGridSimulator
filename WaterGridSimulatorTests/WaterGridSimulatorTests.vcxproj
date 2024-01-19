@@ -167,6 +167,7 @@
     <ClCompile Include="PondTests.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="CellTests.cpp" />
+    <ClCompile Include="WaterGridSimulatorTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CellPositionSetHelper.hpp" />

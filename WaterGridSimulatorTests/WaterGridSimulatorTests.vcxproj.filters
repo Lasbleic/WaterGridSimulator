@@ -39,6 +39,9 @@
     <ClCompile Include="CellPositionSetHelper.cpp">
       <Filter>Fichiers sources\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="WaterGridSimulatorTests.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
