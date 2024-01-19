@@ -87,10 +87,10 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 
 	//Add the water to the closest cells that level is lower than the updated cell
 	CellPositionSet visitedCellsPositions;
-	CellPositionSet cellsPositionsToVisit;
 	CellPositionSet cellsPositionToAddWaterTo;
+	std::list<CellPosition> cellsPositionsToVisit;
 	// We separe the "cells to visit" in two sets to keep track of the distance from the updated cell
-	CellPositionSet cellsPositionsToVisitNextStep{ updatedCellPosition };
+	std::list<CellPosition> cellsPositionsToVisitNextStep{ updatedCellPosition };
 	
 	bool lowerCellsToFlowToFound = false;
 
@@ -101,7 +101,7 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 		cellsPositionsToVisit.clear();
 		for (CellPosition cellPosition : cellsPositionsToVisitNextStep)
 		{
-			cellsPositionsToVisit.insert(cellPosition);
+			cellsPositionsToVisit.push_back(cellPosition);
 		}
 		cellsPositionsToVisitNextStep.clear();
 
@@ -140,7 +140,7 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 					continue;
 				}
 
-				cellsPositionsToVisitNextStep.insert(neighborPositionPair);
+				cellsPositionsToVisitNextStep.push_back(neighborPositionPair);
 			}
 
 			visitedCellsPositions.insert(cellPosition);
