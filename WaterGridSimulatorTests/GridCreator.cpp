@@ -87,3 +87,199 @@ CellGrid createComplexRealCellGrid()
 
 	return cellGrid;
 }
+
+CellGrid createStairLikeGrid() 
+{
+	// Grid is:
+	// f5 f5 f4 f3 f2 f2
+	// f5 f4 f3 f2 f1 f2
+	// f5 f5 f4 f3 f2 f2
+
+	CellGrid cellGrid{ 3, 6 };
+
+	// f5 f5 f4 f3 f2 f2
+	cellGrid.getCell(CellPosition{ 0, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 2 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 0, 3 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 0, 4 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 0, 5 }).addFloor(2);
+	// f5 f4 f3 f2 f1 f2
+	cellGrid.getCell(CellPosition{ 1, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 1, 1 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 1, 2 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 3 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 1, 4 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 1, 5 }).addFloor(2);
+	// f5 f5 f4 f3 f2 f2
+	cellGrid.getCell(CellPosition{ 2, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 2 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 2, 3 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 2, 4 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 2, 5 }).addFloor(2);
+
+	return cellGrid;
+}
+
+CellGrid createQuarterPyramidGrid() 
+{
+	// Grid is:
+	// f5 f5 f5  f5  f5
+	// f5 f4 f3  f2  f5
+	// f5 f3 f2  w.5 f5
+	// f5 f2 w.5 w.5 f5
+	// f5 f5 f5  f5  f5
+
+	CellGrid cellGrid{ 5, 5 };
+
+	// f5 f5 f5  f5  f5
+	cellGrid.getCell(CellPosition{ 0, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 2 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 3 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 4 }).addFloor(5);
+	// f5 f4 f3  f2  f5
+	cellGrid.getCell(CellPosition{ 1, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 1, 1 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 1, 2 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 3 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 1, 4 }).addFloor(2);
+	// f5 f3 f2  w.5 f5
+	cellGrid.getCell(CellPosition{ 2, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 1 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 2, 2 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 2, 3 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 2, 4 }).addFloor(5);
+	// f5 f2 w.5 w.5 f5
+	cellGrid.getCell(CellPosition{ 3, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 3, 1 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 3, 2 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 3, 3 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 3, 4 }).addFloor(5);
+	// f5 f5 f5  f5  f5
+	cellGrid.getCell(CellPosition{ 4, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 4, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 4, 2 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 4, 3 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 4, 4 }).addFloor(5);
+
+	return cellGrid;
+}
+
+CellGrid createSmallIslandGrid() 
+{
+	// Grid is:
+	// f1  f1 f1  f1  f1
+	// f1 w.5 w.5 w.5 f1
+	// f1 w.5 f1  w.5 f1
+	// f1 w.5 w.5 w.5 f1
+	// f1  f1 f1  f1  f1
+
+	CellGrid cellGrid{ 5, 5 };
+
+	// f1  f1 f1  f1  f1
+	cellGrid.getCell(CellPosition{ 0, 0 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 0, 1 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 0, 2 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 0, 3 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 0, 4 }).addFloor(1);
+	// f1 w.5 w.5 w.5 f1
+	cellGrid.getCell(CellPosition{ 1, 0 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 1, 1 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 1, 2 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 1, 3 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 1, 4 }).addFloor(1);
+	// f1 w.5 f1  w.5 f1
+	cellGrid.getCell(CellPosition{ 2, 0 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 2, 1 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 2, 2 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 2, 3 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 2, 4 }).addFloor(1);
+	// f1 w.5 w.5 w.5 f1
+	cellGrid.getCell(CellPosition{ 3, 0 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 3, 1 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 3, 2 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 3, 3 }).addWater(0.5);
+	cellGrid.getCell(CellPosition{ 3, 4 }).addFloor(1);
+	// f1  f1 f1  f1  f1
+	cellGrid.getCell(CellPosition{ 4, 0 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 4, 1 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 4, 2 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 4, 3 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 4, 4 }).addFloor(1);
+}
+
+CellGrid createCorridorCellGrid() 
+{
+	// Grid is:
+	// f5 f5 f5 f5 f5 f5 f5
+	// f5 f1 f3 f3 f3 f1 f5
+	// f5 f5 f5 f5 f5 f5 f5
+
+	CellGrid cellGrid{ 3, 6 };
+
+	// f5 f5 f5 f5 f5 f5 f5
+	cellGrid.getCell(CellPosition{ 0, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 2 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 3 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 4 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 5 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 6 }).addFloor(5);
+	// f5 f1 f3 f3 f3 f1 f5
+	cellGrid.getCell(CellPosition{ 1, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 1, 1 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 1, 2 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 3 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 4 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 5 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 1, 6 }).addFloor(5);
+	// f5 f5 f5 f5 f5 f5 f5
+	cellGrid.getCell(CellPosition{ 2, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 2 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 3 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 4 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 5 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 6 }).addFloor(5);
+
+	return cellGrid;
+}
+
+CellGrid createStairLikeWithMiddlePondGrid()
+{
+	// Grid is:
+	// f5 f5 f4  f3  f3 f2 f2
+	// f5 f4 f3 w1.5 f2 f1 f2
+	// f5 f5 f4  f3  f3 f2 f2
+
+	CellGrid cellGrid{ 3, 6 };
+
+	// f5 f5 f4  f3  f3 f2 f2
+	cellGrid.getCell(CellPosition{ 0, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 0, 2 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 0, 3 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 0, 4 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 0, 5 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 0, 6 }).addFloor(2);
+	// f5 f4 f3 w1.5 f2 f1 f2
+	cellGrid.getCell(CellPosition{ 1, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 1, 1 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 1, 2 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 1, 3 }).addWater(1.5);
+	cellGrid.getCell(CellPosition{ 1, 4 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 1, 5 }).addFloor(1);
+	cellGrid.getCell(CellPosition{ 1, 5 }).addFloor(2);
+	// f5 f5 f4  f3  f3 f2 f2
+	cellGrid.getCell(CellPosition{ 2, 0 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 1 }).addFloor(5);
+	cellGrid.getCell(CellPosition{ 2, 2 }).addFloor(4);
+	cellGrid.getCell(CellPosition{ 2, 3 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 2, 4 }).addFloor(3);
+	cellGrid.getCell(CellPosition{ 2, 5 }).addFloor(2);
+	cellGrid.getCell(CellPosition{ 2, 6 }).addFloor(2);
+
+	return cellGrid;
+}
