@@ -20,6 +20,11 @@ void WaterGridSimulator::addWater(int row, int column, double volume)
 
 void WaterGridSimulator::addWater(const CellPosition& updatedCellPosition, double volume)
 {
+	if (isPositionOutOfGrid(updatedCellPosition, m_cellGrid)) {
+		// TODO: keep a counter of the volume of water lost
+		return;
+	}
+
 	Cell& updatedCell = m_cellGrid.getCell(updatedCellPosition);
 	if (updatedCell.hasWater())
 	{
@@ -48,8 +53,7 @@ void WaterGridSimulator::addWaterOnWaterCell(const CellPosition& updatedCellPosi
 		overflowingVolume = volume - addedVolumeByCell * pond.size();
 	}
 
-	CellPositionSet waterCells = pond.getWaterCells();
-	for (CellPosition waterCellPosition : waterCells) {
+	for (CellPosition waterCellPosition : pond.getWaterCells()) {
 		Cell& cell = m_cellGrid.getCell(waterCellPosition);
 		cell.addWater(addedVolumeByCell);
 	}
@@ -74,8 +78,13 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 	// We separe the "cells to visit" in two sets to keep track of the distance from the updated cell
 	CellPositionSet cellsPositionsToVisitNextStep{ updatedCellPosition };
 	
-	while (!cellsPositionsToVisitNextStep.empty() && cellsPositionToAddWaterTo.empty())
+	bool lowerCellsToFlowToFound = false;
+
+	// While we have cells to visit on next step and no cells to add water to, we keep visiting surrounding cells
+	while (!cellsPositionsToVisitNextStep.empty() && !lowerCellsToFlowToFound)
 	{
+		// We transfer the cells positions to visit next step to the actual cells we will visit on this step
+		cellsPositionsToVisit.clear();
 		for (CellPosition cellPosition : cellsPositionsToVisitNextStep)
 		{
 			cellsPositionsToVisit.insert(cellPosition);
@@ -84,60 +93,56 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 
 		for (CellPosition cellPosition : cellsPositionsToVisit)
 		{
-			int row = cellPosition.getRow();
-			int column = cellPosition.getColumn();
 			if (isPositionOutOfGrid(cellPosition, m_cellGrid))
 			{
 				// If the cell is out of the grid, we add it to the set of cells to add water to and continue
 				cellsPositionToAddWaterTo.insert(cellPosition);
+				lowerCellsToFlowToFound = true;
 				continue;
 			}
 
 			Cell& cellToVisit = m_cellGrid.getCell(cellPosition);
+
+			if (cellToVisit.getLevel() > updatedCell.getLevel())
+			{
+				// If the cell is higher than the updated cell, we don't need to visit its neighbors
+				// as water won't flow through it
+				continue;
+			}
+
 			if (cellToVisit.getLevel() < updatedCell.getLevel())
 			{
+				// The water will flow to this cell. We keep the "for" loop going on to check if there
+				// would be other cells to flow to.
 				cellsPositionToAddWaterTo.insert(cellPosition);
+				continue;
 			}
-			else
-			{
-				if (cellToVisit.getLevel() > updatedCell.getLevel())
-				{
-					// If the cell is higher than the updated cell, we don't need to visit its neighbors
-					// as water won't flow through them
-					continue;
-				}
-				for (CellPosition neighborPositionPair : getNeighborCellsPositions(cellPosition, m_cellGrid, true))
-				{
-					if (visitedCellsPositions.find(neighborPositionPair) == visitedCellsPositions.end())
-					{
-						cellsPositionsToVisitNextStep.insert(neighborPositionPair);
-					}
-				}
-			}
-			visitedCellsPositions.insert(cellPosition);
-		}
-		cellsPositionsToVisit.clear();
 
-		if (!cellsPositionToAddWaterTo.empty())
-		{
-			for (CellPosition cellPosition : cellsPositionToAddWaterTo)
+			for (CellPosition neighborPositionPair : getNeighborCellsPositions(cellPosition, m_cellGrid, true))
 			{
-				if (isPositionOutOfGrid(cellPosition, m_cellGrid))
+				// If the neighbour has already been visited, we don't add it to cellsPositionToVisit
+				if (visitedCellsPositions.find(neighborPositionPair) != visitedCellsPositions.end())
 				{
-					// If the cell is out of the grid, we don't add water to it
-					// TODO: keep track of the volume of water that has been lost
 					continue;
 				}
-				addWater(cellPosition, volume / cellsPositionToAddWaterTo.size());
+
+				cellsPositionsToVisitNextStep.insert(neighborPositionPair);
 			}
+
+			visitedCellsPositions.insert(cellPosition);
 		}
 	}
 
-	// If no cell is lower than floor level, we fill the pond with water
-	if (cellsPositionToAddWaterTo.empty())
+	if (lowerCellsToFlowToFound)
 	{
-		// If we haven't found any cell that is lower than the updated cell. In that case,
-		// we add the water to every visited cell
+		for (CellPosition cellPosition : cellsPositionToAddWaterTo)
+		{
+			addWater(cellPosition, volume / cellsPositionToAddWaterTo.size());
+		}
+	}
+	else
+	{
+		// In that case, we add the water to every visited cell as it constitue a new pond
 		for (CellPosition cellPosition : visitedCellsPositions)
 		{
 			m_cellGrid.getCell(cellPosition).addWater(volume / visitedCellsPositions.size());
