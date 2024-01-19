@@ -4,11 +4,11 @@
 
 // Handling randomness
 std::mt19937 rng(time(NULL));
-std::uniform_int_distribution<int> uniform_int_dist{ 0, 100 };
-std::uniform_int_distribution<int> uniform_int_dist_below_5{ 0, 5 };
+std::uniform_int_distribution<int> uniform_int_dist{ 1, 100 };
+std::uniform_int_distribution<int> uniform_int_dist_below_5{ 1, 5 };
 std::uniform_int_distribution<int> uniform_int_dist_above_5{ 5, 100 };
-std::uniform_real_distribution<double> uniform_double_dist{ 0, 100 };
-std::uniform_real_distribution<double> uniform_double_dist_below_5{ 0, 5 };
+std::uniform_real_distribution<double> uniform_double_dist{ 1, 100 };
+std::uniform_real_distribution<double> uniform_double_dist_below_5{ 1, 5 };
 std::uniform_real_distribution<double> uniform_double_dist_above_5{ 5, 100 };
 
 int getRandomInt() 
