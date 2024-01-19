@@ -46,7 +46,7 @@ int main()
 		try {
 			std::cin >> command;
 		}
-		catch (std::invalid_argument& e) {
+		catch (std::invalid_argument&) {
 			std::cout << "Unknown command. Commands are :" << std::endl;
 			std::cout << " -\"new\"" << std::endl;
 			std::cout << " -\"exit\"" << std::endl;
