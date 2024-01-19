@@ -12,6 +12,7 @@ public:
 
 	//Getters
 	const CellGrid& getCellGrid() const noexcept;
+	double getWaterVolumeLost() const noexcept;
 
 	//Methods
 	void addWater(int row, int column, double volume);
@@ -22,4 +23,5 @@ private:
 	void addWaterOnWaterCell(const CellPosition& updatedCellPosition, double volume);
 	void addWaterOnFloorCell(const CellPosition& updatedCellPosition, double volume);
 	CellGrid m_cellGrid;
+	double m_waterVolumeLost;
 };

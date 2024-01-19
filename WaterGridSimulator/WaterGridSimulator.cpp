@@ -4,7 +4,7 @@
 #include "CellGridUtils.hpp"
 
 WaterGridSimulator::WaterGridSimulator(int numberRows, int numberColumns) noexcept
-	: m_cellGrid(numberRows, numberColumns)
+	: m_cellGrid(numberRows, numberColumns), m_waterVolumeLost(0)
 {
 }
 
@@ -13,15 +13,29 @@ const CellGrid& WaterGridSimulator::getCellGrid() const noexcept
 	return m_cellGrid;
 }
 
+double WaterGridSimulator::getWaterVolumeLost() const noexcept 
+{
+	return m_waterVolumeLost;
+}
+
 void WaterGridSimulator::addWater(int row, int column, double volume)
 {
 	addWater(CellPosition{ row, column }, volume);
 }
 
+void WaterGridSimulator::addFloor(int row, int column, int height)
+{
+	CellPosition updatedCellPosition{ row, column };
+	double volumeOfWaterReplaced = m_cellGrid.getCell(updatedCellPosition).addFloor(height);
+	if (volumeOfWaterReplaced > 0) {
+		addWater(updatedCellPosition, volumeOfWaterReplaced);
+	}
+}
+
 void WaterGridSimulator::addWater(const CellPosition& updatedCellPosition, double volume)
 {
 	if (isPositionOutOfGrid(updatedCellPosition, m_cellGrid)) {
-		// TODO: keep a counter of the volume of water lost
+		m_waterVolumeLost += volume;
 		return;
 	}
 
@@ -147,14 +161,5 @@ void WaterGridSimulator::addWaterOnFloorCell(const CellPosition& updatedCellPosi
 		{
 			m_cellGrid.getCell(cellPosition).addWater(volume / visitedCellsPositions.size());
 		}
-	}
-}
-
-void WaterGridSimulator::addFloor(int row, int column, int height)
-{
-	CellPosition updatedCellPosition{ row, column };
-	double volumeOfWaterReplaced = m_cellGrid.getCell(updatedCellPosition).addFloor(height);
-	if (volumeOfWaterReplaced > 0) {
-		addWater(updatedCellPosition, volumeOfWaterReplaced);
 	}
 }
