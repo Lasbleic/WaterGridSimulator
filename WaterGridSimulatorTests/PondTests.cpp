@@ -140,5 +140,34 @@ namespace WaterGridSimulatorTests
 			Assert::AreEqual(pond.size(), pond2.size());
 			Assert::IsTrue(areAllElementEquals(pond.getWaterCells(), pond2.getWaterCells()));
 		}
+
+		TEST_METHOD(TestComputePondOnRealComplexSituation)
+		{
+			// Grid be like:
+			// f9 f9 f9 f6 f5 f4 f5 f5 f3
+			// f8 W6 f6 f9 W3 f3 f1 W1 f2
+			// f9 f7 f8 W4 f4 f3 f6 W1 f1
+			// f6 W5 W5 f5 W3 W3 f4 W1 f1
+			// f7 W5 W5 W5 f6 W3 f3 W1 f2
+			// f2 f8 W5 W5 f5 W3 f4 W1 f1
+			// f0 f9 f6 f5 f2 f6 f0 f1 f0
+
+			CellGrid cellGrid = createComplexRealCellGrid();
+
+			Pond highestPond = Pond::computePondFromCellWithWater(CellPosition{ 1, 1 }, cellGrid);
+			Assert::AreEqual(highestPond.size(), static_cast<std::size_t>(1));
+			Assert::AreEqual(highestPond.getLowestBorderCells().size(), static_cast<std::size_t>(1));
+
+			Pond biggestPond1 = Pond::computePondFromCellWithWater(CellPosition{ 3, 1 }, cellGrid);
+			Pond biggestPond2 = Pond::computePondFromCellWithWater(CellPosition{ 5, 3 }, cellGrid);
+			Assert::AreEqual(biggestPond1.size(), static_cast<size_t>(7));
+			Assert::IsTrue(areAllElementEquals(biggestPond1.getWaterCells(), biggestPond2.getWaterCells()));
+			Assert::IsTrue(areAllElementEquals(biggestPond1.getLowestBorderCells(), biggestPond2.getLowestBorderCells()));
+			Assert::IsTrue(areAllElementEquals(biggestPond1.getLowestBorderCells(), CellPositionSet{ CellPosition{ 3, 3 }, CellPosition{ 5, 4 }, CellPosition{ 6, 3 } }));
+
+			Pond lonelyPond = Pond::computePondFromCellWithWater(CellPosition{ 2, 3 }, cellGrid);
+			Assert::AreEqual(lonelyPond.size(), static_cast<std::size_t>(1));
+			Assert::IsTrue(areAllElementEquals(lonelyPond.getLowestBorderCells(), CellPositionSet{ CellPosition{ 2, 4 } }));
+		}
 	};
 }
