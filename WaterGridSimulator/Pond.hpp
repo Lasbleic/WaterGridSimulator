@@ -7,7 +7,7 @@
 class Pond
 {
 public:
-	static Pond getPond(const CellPosition& cellPosition, const CellGrid& cellGrid);
+	static Pond computePondFromCellWithWater(const CellPosition& cellPosition, const CellGrid& cellGrid);
 	std::size_t size() const noexcept;
 	const CellPositionSet& getLowestBorderCells() const noexcept;
 	const CellPositionSet& getWaterCells() const noexcept;

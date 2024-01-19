@@ -2,7 +2,7 @@
 #include "Pond.hpp"
 #include "CellGridUtils.hpp"
 
-Pond Pond::getPond(const CellPosition& cellPosition, const CellGrid& cellGrid)
+Pond Pond::computePondFromCellWithWater(const CellPosition& cellPosition, const CellGrid& cellGrid)
 {
 	const Cell& initialCell = cellGrid.getCell(cellPosition);
 	if (!initialCell.hasWater())
