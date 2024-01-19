@@ -8,5 +8,11 @@
 #define PCH_H
 
 // ajouter les en-têtes à précompiler ici
+#include <iomanip>
+#include <iostream>
+#include <unordered_set>
+#include <cassert>
+#include <cstddef>
+#include <queue>
 
 #endif //PCH_H
