@@ -24,12 +24,12 @@ const Cell& CellGrid::getCell(const CellPosition& cellPosition) const noexcept
 	return m_cellGrid[cellPosition.getRow()][cellPosition.getColumn()];
 }
 
-int CellGrid::getNumberRows() const noexcept
+std::size_t CellGrid::getNumberRows() const noexcept
 {
 	return m_cellGrid.size();
 }
 
-int CellGrid::getNumberColumns() const noexcept
+std::size_t CellGrid::getNumberColumns() const noexcept
 {
 	if (m_cellGrid.empty())
 	{
