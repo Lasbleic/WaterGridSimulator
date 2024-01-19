@@ -30,3 +30,8 @@ std::vector<CellPosition> getNeighborCellsPositions(const CellPosition& cellPosi
 
 	return neighborCells;
 }
+
+bool isPositionOutOfGrid(const CellPosition& cellPosition, const CellGrid& cellGrid) 
+{
+	return cellPosition.getRow() < 0 || cellPosition.getRow() >= cellGrid.getNumberRows() || cellPosition.getColumn() < 0 || cellPosition.getColumn() >= cellGrid.getNumberColumns();
+}

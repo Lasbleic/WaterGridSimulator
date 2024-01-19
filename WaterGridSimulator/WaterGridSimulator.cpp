@@ -82,7 +82,7 @@ void WaterGridSimulator::addWaterOnFloorCell(CellPosition updatedCellPosition, d
 		{
 			int row = cellPosition.getRow();
 			int column = cellPosition.getColumn();
-			if (row < 0 || row >= m_cellGrid.getNumberRows() || column < 0 || column >= m_cellGrid.getNumberColumns())
+			if (isPositionOutOfGrid(cellPosition, m_cellGrid))
 			{
 				// If the cell is out of the grid, we add it to the set of cells to add water to and continue
 				cellsPositionToAddWaterTo.insert(cellPosition);
@@ -120,7 +120,7 @@ void WaterGridSimulator::addWaterOnFloorCell(CellPosition updatedCellPosition, d
 			{
 				int row = cellPosition.getRow();
 				int column = cellPosition.getColumn();
-				if (row < 0 || row >= m_cellGrid.getNumberRows() || column < 0 || column >= m_cellGrid.getNumberColumns())
+				if (isPositionOutOfGrid(cellPosition, m_cellGrid))
 				{
 					// If the cell is out of the grid, we don't add water to it
 					// TODO: keep track of the volume of water that has been lost
