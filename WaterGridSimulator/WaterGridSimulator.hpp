@@ -19,6 +19,4 @@ public:
 
 private:
 	CellGrid m_cellGrid;
-	Pond getPond(const CellPosition&) noexcept;
-	std::vector<CellPosition> getNeighborCells(const CellPosition&, bool includeOutOfBoundaries = false) noexcept;
 };

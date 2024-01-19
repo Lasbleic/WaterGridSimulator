@@ -51,6 +51,9 @@
     <ClInclude Include="CellPositionSet.hpp">
       <Filter>Fichiers d%27en-tête\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="CellGridUtils.hpp">
+      <Filter>Fichiers d%27en-tête\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WaterGridSimulator.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="CellGrid.cpp">
       <Filter>Fichiers sources\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="CellGridUtils.cpp">
+      <Filter>Fichiers sources\Utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

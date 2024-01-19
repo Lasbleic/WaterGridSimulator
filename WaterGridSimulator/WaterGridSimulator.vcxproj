@@ -144,6 +144,7 @@
     <ClInclude Include="CellPosition.hpp" />
     <ClInclude Include="CellPositionSet.hpp" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="CellGridUtils.hpp" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Pond.hpp" />
     <ClInclude Include="WaterGridSimulator.hpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="CellGrid.cpp" />
     <ClCompile Include="CellPosition.cpp" />
+    <ClCompile Include="CellGridUtils.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

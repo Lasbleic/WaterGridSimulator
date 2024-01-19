@@ -7,13 +7,14 @@
 class Pond
 {
 public:
-	Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells, const CellGrid& cellGrid);
-	int size() const noexcept;
+	static Pond getPond(const CellPosition& cellPosition, const CellGrid& cellGrid);
+	std::size_t size() const noexcept;
 	const CellPositionSet& getLowestBorderCells() const noexcept;
 	const CellPositionSet& getWaterCells() const noexcept;
 
 
 private:
+	Pond() = default;
 	CellPositionSet m_waterCells;
 	CellPositionSet m_borderCells;
 	CellPositionSet m_lowestBorderCells;

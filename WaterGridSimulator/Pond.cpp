@@ -1,47 +1,70 @@
 #include "pch.h"
 #include "Pond.hpp"
+#include "CellGridUtils.hpp"
 
-Pond::Pond(const CellPositionSet& waterCells, const CellPositionSet& borderCells, const CellGrid& cellGrid)
-	: m_waterCells{ waterCells }, m_borderCells{ borderCells }, m_lowestBorderCells{}
+Pond Pond::getPond(const CellPosition& cellPosition, const CellGrid& cellGrid)
 {
-	// Check that the pond is not empty
-	assert(waterCells.size() > 0 && "Pond is created without any water cells in it");
-	
-	// Check that all water cells are water cells and have the same water level
-	double waterLevel = cellGrid.getCell(*waterCells.begin()).getLevel();
-
-	for (CellPosition cellPosition : waterCells)
+	const Cell& initialCell = cellGrid.getCell(cellPosition);
+	if (!initialCell.hasWater())
 	{
-		assert(cellGrid.getCell(cellPosition).getLevel() == waterLevel && "Pond is created with water cells having different water levels");
-		assert(cellGrid.getCell(cellPosition).hasWater() && "Pond is created with non-water cells");
+		throw std::invalid_argument("A pond has sense only for water cells");
 	}
 
-	// Check that all border cells are water less cells and are higher than the water level
-	double lowestBorderCellsFloorLevel = cellGrid.getCell(*borderCells.begin()).getLevel();
-	for (CellPosition cellPosition : borderCells)
+	Pond pond{};
+
+	CellPositionSet visitedCellsPositions;
+	std::queue<CellPosition> cellsPositionsToVisit;
+	cellsPositionsToVisit.push(cellPosition);
+
+	// Initialize the lowest border cells floor level with the max value
+	double lowestBorderCellsFloorLevel = std::numeric_limits<int>::max();
+
+	while (!cellsPositionsToVisit.empty())
 	{
-		Cell cell = cellGrid.getCell(cellPosition);
-		assert(!cell.hasWater() && "Pond is created with water cells as border cells");
-		assert(cell.getLevel() >= waterLevel && "Pond is created with border cells lower than the water level");
+		CellPosition currentCellPosition = cellsPositionsToVisit.front();
+		cellsPositionsToVisit.pop();
+
+		visitedCellsPositions.insert(currentCellPosition);
+
+		const Cell& cellToVisit = cellGrid.getCell(currentCellPosition);
+
+		// If cell is water cell, we keep exploring surrounding cells
+		if (cellToVisit.hasWater())
+		{
+			pond.m_waterCells.insert(currentCellPosition);
+			for (CellPosition neighbourPosition : getNeighborCellsPositions(currentCellPosition, cellGrid))
+			{
+				if (visitedCellsPositions.find(neighbourPosition) == visitedCellsPositions.end())
+				{
+					cellsPositionsToVisit.push(neighbourPosition);
+				}
+			}
+			continue;
+		}
+
+		// If cell is not water cell, we add it to the border cells, and update the lowest border cells set by the way
+		pond.m_borderCells.insert(currentCellPosition);
 
 		// Create the unordered_set of the lowest border cells from the border cells
-		if (cell.getLevel() == lowestBorderCellsFloorLevel)
+		if (cellToVisit.getLevel() == lowestBorderCellsFloorLevel)
 		{
-			m_lowestBorderCells.insert(cellPosition);
+			pond.m_lowestBorderCells.insert(cellPosition);
 		}
-		else if (cell.getLevel() < lowestBorderCellsFloorLevel)
+		else if (cellToVisit.getLevel() < lowestBorderCellsFloorLevel)
 		{
-			lowestBorderCellsFloorLevel = cell.getLevel();
-			m_lowestBorderCells.clear();
-			m_lowestBorderCells.insert(cellPosition);
+			lowestBorderCellsFloorLevel = cellToVisit.getLevel();
+			pond.m_lowestBorderCells.clear();
+			pond.m_lowestBorderCells.insert(cellPosition);
 		}
 	}
+	
+	return pond;
 }
 
-int Pond::size() const noexcept
+std::size_t Pond::size() const noexcept
 {
 	// Return the number of water cells
-	return static_cast<int>(m_waterCells.size());
+	return m_waterCells.size();
 }
 
 const CellPositionSet& Pond::getLowestBorderCells() const noexcept
