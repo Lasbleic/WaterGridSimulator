@@ -169,5 +169,40 @@ namespace WaterGridSimulatorTests
 			Assert::AreEqual(lonelyPond.size(), static_cast<std::size_t>(1));
 			Assert::IsTrue(areAllElementEquals(lonelyPond.getLowestBorderCells(), CellPositionSet{ CellPosition{ 2, 4 } }));
 		}
+
+		TEST_METHOD(TestComputePondOnMultipleWaterCellSquarePondWithIsland)
+		{
+			int GRID_NUMBER_ROW = getRandomInt(5, 15);
+			int GRID_NUMBER_COLUMN = getRandomInt(5, 15);
+			CellGrid cellGrid{ GRID_NUMBER_ROW, GRID_NUMBER_COLUMN };
+
+			int ISLAND_ROW = getRandomInt(2, GRID_NUMBER_ROW - 3);
+			int ISLAND_COLUMN = getRandomInt(2, GRID_NUMBER_COLUMN - 3);
+
+			for (int i = 0; i < GRID_NUMBER_ROW; i++)
+			{
+				for (int j = 0; j < GRID_NUMBER_COLUMN; j++)
+				{
+					if (i == 0 || i == GRID_NUMBER_ROW - 1 || j == 0 || j == GRID_NUMBER_COLUMN - 1)
+					{
+						cellGrid.getCell(CellPosition{ i, j }).addFloor(1);
+						continue;
+					}
+
+					if (i == ISLAND_ROW && j == ISLAND_COLUMN)
+					{
+						cellGrid.getCell(CellPosition{ i, j }).addFloor(1);
+						continue;
+					}
+
+					cellGrid.getCell(CellPosition{ i, j }).addWater(0.5);
+				}
+			}
+
+			Pond pond = Pond::computePondFromCellWithWater(CellPosition{ getRandomInt(1, GRID_NUMBER_ROW - 2), getRandomInt(1, GRID_NUMBER_COLUMN - 2) }, cellGrid);
+
+			Assert::AreEqual(pond.size(), static_cast<size_t>((GRID_NUMBER_ROW - 2) * (GRID_NUMBER_COLUMN - 2) - 1));
+			Assert::AreEqual(pond.getLowestBorderCells().size(), static_cast<size_t>((GRID_NUMBER_ROW - 2) * 2 + (GRID_NUMBER_COLUMN - 2) * 2 + 1));
+		}
 	};
 }
