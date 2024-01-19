@@ -52,10 +52,10 @@ namespace WaterGridSimulatorTests
 		TEST_METHOD(TestAddFloor)
 		{
 			const int BASE_FLOOR_LEVEL = getRandomInt();
-			const double BASE_WATER_VOLUME_BELOW_5 = getRandomDoubleBelow5();
-			const double BASE_WATER_VOLUME_ABOVE_5 = getRandomDoubleAbove5();
-			const int FLOOR_LEVEL_TO_ADD_BELOW_5 = getRandomIntBelow5();
-			const int FLOOR_LEVEL_TO_ADD_ABOVE_5 = getRandomIntAbove5();
+			const double BASE_WATER_VOLUME_BELOW_5 = getRandomDouble(1, 5);
+			const double BASE_WATER_VOLUME_ABOVE_5 = getRandomDouble(5, 100);
+			const int FLOOR_LEVEL_TO_ADD_BELOW_5 = getRandomInt(1, 5);
+			const int FLOOR_LEVEL_TO_ADD_ABOVE_5 = getRandomInt(5, 100);
 
 			Cell waterLessCell{ BASE_FLOOR_LEVEL, 0, 0, 0 };
 			Cell cellWithWaterHigherThanFloorAdded{ BASE_FLOOR_LEVEL, BASE_WATER_VOLUME_ABOVE_5, 0, 0 };

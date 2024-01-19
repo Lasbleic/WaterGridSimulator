@@ -2,12 +2,8 @@
 
 int getRandomInt();
 
-int getRandomIntBelow5();
-
-int getRandomIntAbove5();
+int getRandomInt(int min, int max);
 
 double getRandomDouble();
 
-double getRandomDoubleBelow5();
-
-double getRandomDoubleAbove5();
+double getRandomDouble(double min, double max);
