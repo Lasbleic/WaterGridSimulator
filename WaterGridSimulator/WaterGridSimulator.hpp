@@ -18,5 +18,7 @@ public:
 	void addFloor(int row, int column, int height) noexcept;
 
 private:
+	void addWaterOnWaterCell(CellPosition updatedCellPosition, double volume);
+	void addWaterOnFloorCell(CellPosition updatedCellPosition, double volume);
 	CellGrid m_cellGrid;
 };
