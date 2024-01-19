@@ -48,13 +48,13 @@ Pond Pond::computePondFromCellWithWater(const CellPosition& cellPosition, const 
 		// Create the unordered_set of the lowest border cells from the border cells
 		if (cellToVisit.getLevel() == lowestBorderCellsFloorLevel)
 		{
-			pond.m_lowestBorderCells.insert(cellPosition);
+			pond.m_lowestBorderCells.insert(currentCellPosition);
 		}
 		else if (cellToVisit.getLevel() < lowestBorderCellsFloorLevel)
 		{
 			lowestBorderCellsFloorLevel = cellToVisit.getLevel();
 			pond.m_lowestBorderCells.clear();
-			pond.m_lowestBorderCells.insert(cellPosition);
+			pond.m_lowestBorderCells.insert(currentCellPosition);
 		}
 	}
 	
